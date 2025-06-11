@@ -178,23 +178,23 @@ def log_dsp_rx_rm(case, simh, STEP=1,END_LOG_RM=0):
                         f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_offset_hi_enable',                    
                         f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_offset_hq_enable',                    
 
-                        # f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_loopback_hi_srst',                        
-                        # f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_loopback_hq_srst', 
-                        # f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_loopback_hi_enable',                      
-                        # f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_loopback_hq_enable', 
-                        # f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_loopback_hi_srst',                        
-                        # f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_loopback_hq_srst', 
-                        # f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_loopback_hi_enable',                      
-                        # f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_loopback_hq_enable', 
-# FIXME: MANUALLY ADDED
-    #                   f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_digadc_hi_srst',
-    #                   f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_digadc_hq_srst',
-    #                   f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_digadc_hi_enable',
-    #                   f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_digadc_hq_enable',
-    #                   f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_digadc_hi_srst',
-    #                   f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_digadc_hq_srst',
-    #                   f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_digadc_hi_enable',
-    #                   f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_digadc_hq_enable',
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_loopback_hi_srst',                        
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_loopback_hq_srst', 
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_loopback_hi_enable',                      
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_loopback_hq_enable', 
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_loopback_hi_srst',                        
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_loopback_hq_srst', 
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_loopback_hi_enable',                      
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_loopback_hq_enable', 
+
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_digadc_hi_srst',
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_digadc_hq_srst',
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_digadc_hi_enable',
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_sel_rx_digadc_hq_enable',
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_digadc_hi_srst',
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_digadc_hq_srst',
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_digadc_hi_enable',
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_rx_scfsm_ovr_rx_digadc_hq_enable',
 
                         f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_mode',
 
@@ -211,6 +211,9 @@ def log_dsp_rx_rm(case, simh, STEP=1,END_LOG_RM=0):
                         f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_comp_eq_hq_taps_leakage',
                         f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_comp_eq_hq_offset_leakage',
 
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_comp_eq_hi_cal_adc_fir_taps',
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_comp_eq_hq_cal_adc_fir_taps',
+
                         f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_corr_hi_afifo_delay',
                         f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_corr_hi_correlation_length',
                         f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_corr_hi_bypass_correlator',
@@ -225,6 +228,15 @@ def log_dsp_rx_rm(case, simh, STEP=1,END_LOG_RM=0):
                         f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_corr_hq_phase',
                         f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_corr_hq_reference_coef',
                         f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_corr_hq_data_path_fifo_ptr',
+
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_corr_hi_ovr_tap_value',
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_corr_hq_ovr_tap_value',
+
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_corr_hi_ovr_tap',
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_corr_hq_ovr_tap',
+
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_corr_hi_reference_offset',
+                        f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_corr_hq_reference_offset',
 
                         f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_afifo_cal_adc_hi_afifo_valid_delay',
                         f'root.u_dsp_rx_h.u_dsp_rx_regmap.o_rm_static_rx_afifo_cal_adc_hi_read_pointer_reset_value',

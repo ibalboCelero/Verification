@@ -10,18 +10,20 @@ parent_dir = script_dir.parent
 fxp_dir = Path("Monzafxp") / "modules_fxp" / "dsp_rx"
 
 # Define targets
-target_file_doc    = script_dir / fxp_dir / "doc" / "fxpSignals.xlsx"
-target_file_test   = script_dir / fxp_dir / "test" / "validation" / "rtl_vm_test.py"
-target_file_gen   = script_dir / fxp_dir / "test" / "validation" / "generate_sv_test.py"
-target_file_tb_dir = script_dir / fxp_dir / "usim" / "tb" / "tb_rtl_vm"
-target_file_logs   = script_dir / "Monzafxp" / "libs" / "log_rx_rtl.py"
+target_file_doc         = script_dir / fxp_dir / "doc" / "fxpSignals.xlsx"
+target_file_test        = script_dir / fxp_dir / "test" / "validation" / "rtl_vm_test.py"
+target_file_gen         = script_dir / fxp_dir / "test" / "validation" / "generate_sv_tests.py"
+target_file_tb_dir      = script_dir / fxp_dir / "usim" / "tb" / "tb_rtl_vm"
+target_file_logs        = script_dir / "Monzafxp" / "libs" / "log_rx_rtl.py"
+target_file_tb_custom   = script_dir / "modules" / "dsp_rx" / "verification" / "testbench" / "dsp_rx_tb_custom.svh"
 
 # Define destination paths
-dest_path_doc      = parent_dir / "farina_tc_dsp" / "common" / "MonzaFxp" / "modules_fxp" / "dsp_rx" / "doc" / "fxpSignals.xlsx"
-dest_path_test     = parent_dir / "farina_tc_dsp" / "common" / "MonzaFxp" / "modules_fxp" / "dsp_rx" / "tests" / "validation" / "rtl_vm_test.py"
-dest_path_gen      = parent_dir / "farina_tc_dsp" / "common" / "MonzaFxp" / "modules_fxp" / "dsp_rx" / "tests" / "generate_sv_test.py"
-dest_path_tb_dir   = parent_dir / "farina_tc_dsp" / "common" / "MonzaFxp" / "modules_fxp" / "dsp_rx" / "usim" / "testbench" / "tb_rtl_vm"
-dest_path_logs     = parent_dir / "farina_tc_dsp" / "common" / "MonzaFxp" / "libs" / "log_rx_rtl.py" 
+dest_path_doc      = parent_dir / "farina_verification" / "farina_tc_dsp" / "common" / "MonzaFxp" / "modules_fxp" / "dsp_rx" / "doc" / "fxpSignals.xlsx"
+dest_path_test     = parent_dir / "farina_verification" / "farina_tc_dsp" / "common" / "MonzaFxp" / "modules_fxp" / "dsp_rx" / "tests" / "validation" / "rtl_vm_test.py"
+dest_path_gen      = parent_dir / "farina_verification" / "farina_tc_dsp" / "common" / "MonzaFxp" / "modules_fxp" / "dsp_rx" / "tests" / "generate_sv_test.py"
+dest_path_tb_dir   = parent_dir / "farina_verification" / "farina_tc_dsp" / "common" / "MonzaFxp" / "modules_fxp" / "dsp_rx" / "usim" / "testbench" / "tb_rtl_vm"
+dest_path_logs     = parent_dir / "farina_verification" / "farina_tc_dsp" / "common" / "MonzaFxp" / "libs" / "log_rx_rtl.py" 
+dest_path_tb_custom= parent_dir / "farina_verification" / "farina_tc_dsp" / "modules" / "dsp_rx" / "verification" / "testbench" / "dsp_rx_tb_custom.svh" 
 
 def copy_item(target, dest_path, is_dir=False):
     try:
@@ -58,3 +60,4 @@ copy_item(target_file_test,   dest_path_test,   is_dir=False)
 copy_item(target_file_gen,   dest_path_gen,   is_dir=False)
 copy_item(target_file_tb_dir, dest_path_tb_dir, is_dir=True)
 copy_item(target_file_logs,   dest_path_logs,   is_dir=False)
+copy_item(target_file_tb_custom,   dest_path_tb_custom,   is_dir=False)

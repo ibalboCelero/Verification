@@ -49,8 +49,8 @@ aux_modules       = ["rx_comp_eq","rx_comp_adap","rx_comp_lms","synchronizer_sin
                      "rx_mux","rx_regressor","rx_mux_1s","rx_equalizer",
                      "rx_fir","interface_ADC_DIG","top_rx_correlator",
                      "correlator","FSM_rx","adc_gain_offset","adc_offset_n",
-                     "adc_offset","adc_gain_top","adc_gain_0","adc_gain_n",
-                     "adc_gain","counter","rx_scfsm","afifo","datapath_interface",
+                     "adc_offset","adc_gain_top","adc_gain_0","adc_gain_n","rx_mux_register",
+                     "adc_gain","counter","rx_scfsm","afifo","afifo_cal_adc_wraper","datapath_interface_single_reset",
                      "dsp_rx_regmap","serial_to_parallel","parallel_to_serial",
                      "converterd2s","loopback_rx_top","loopback_rx","rx_bypass_samples","rx_dig_adc"]
 modules_fp        = ["stimulus_adc_2_ports","continuous_time_filter"]

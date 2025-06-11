@@ -9,16 +9,18 @@ parent_dir  = script_dir.parent
 fxp_dir = Path("Monzafxp") / "modules_fxp" / "dsp_rx"
 
 # -------- source in COMMON --------
-src_doc    = parent_dir / "farina_tc_dsp" / "common"  / "MonzaFxp" / "modules_fxp" / "dsp_rx" / "doc" / "fxpSignals.xlsx"
-src_test   = parent_dir / "farina_tc_dsp" / "common"  / "MonzaFxp" / "modules_fxp" / "dsp_rx" / "tests" / "validation" / "rtl_vm_test.py"
-src_tb_dir = parent_dir / "farina_tc_dsp" / "common"  / "MonzaFxp" / "modules_fxp" / "dsp_rx" / "usim" / "testbench" / "tb_rtl_vm"
-dest_path_logs     = parent_dir / "farina_tc_dsp" / "common" / "MonzaFxp" / "libs" / "log_rx_rtl.py" 
+src_doc         = parent_dir / "farina_verification" / "farina_tc_dsp" / "common"  / "MonzaFxp" / "modules_fxp" / "dsp_rx" / "doc" / "fxpSignals.xlsx"
+src_test        = parent_dir / "farina_verification" / "farina_tc_dsp" / "common"  / "MonzaFxp" / "modules_fxp" / "dsp_rx" / "tests" / "validation" / "rtl_vm_test.py"
+src_tb_dir      = parent_dir / "farina_verification" / "farina_tc_dsp" / "common"  / "MonzaFxp" / "modules_fxp" / "dsp_rx" / "usim" / "testbench" / "tb_rtl_vm"
+dest_path_logs  = parent_dir / "farina_verification" / "farina_tc_dsp" / "common" / "MonzaFxp" / "libs" / "log_rx_rtl.py" 
+dest_path_tb  = parent_dir / "farina_verification" / "farina_tc_dsp" / "modules" / "dsp_rx" / "verification" / "testbench" / "dsp_rx_tb_custom.svh" 
 
 # -------- destination in VERIFICATION --------
 dst_doc    = script_dir / fxp_dir / "doc" / "fxpSignals.xlsx"
 dst_test   = script_dir / fxp_dir / "test" / "validation" / "rtl_vm_test.py"
 dst_tb_dir = script_dir / fxp_dir / "usim" / "tb" / "tb_rtl_vm"
 target_file_logs   = script_dir / "Monzafxp" / "libs" / "log_rx_rtl.py"
+target_file_tb   = script_dir / "modules" / "dsp_rx" / "verification" / "testbench" / "dsp_rx_tb_custom.svh"
 
 def copy_item(src: Path, dst: Path, is_dir: bool = False):
     print(f"\n→ {src}  →  {dst}")
@@ -50,4 +52,5 @@ def copy_item(src: Path, dst: Path, is_dir: bool = False):
 copy_item(src_doc,    dst_doc,    is_dir=False)
 copy_item(src_test,   dst_test,   is_dir=False)
 copy_item(src_tb_dir, dst_tb_dir, is_dir=True)
+copy_item(dest_path_tb, target_file_tb, is_dir=False)
 copy_item(dest_path_logs, target_file_logs, is_dir=False)
