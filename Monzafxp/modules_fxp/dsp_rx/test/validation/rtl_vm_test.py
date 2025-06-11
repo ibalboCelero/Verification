@@ -124,7 +124,7 @@ case_number = Parameter(
 )
 
 for i,case_num in enumerate(case_number):
-    if 1: # use this if to run a specific test  
+    if i==5: # use this if to run a specific test  
         
         print(f"\n# # # # # # Test Case Number ", i, " Name: ", end="  ")
         print(testcase_name[i%8], end="")

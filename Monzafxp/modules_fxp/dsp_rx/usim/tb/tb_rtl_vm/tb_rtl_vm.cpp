@@ -160,6 +160,9 @@ void Root::Connect()
 
 void Root::Init()
 {
+
+
+    
     dsp_rx_zero.fill(-1);
     zero_noise.fill(0);
     known_noise.fill(2);
@@ -171,6 +174,14 @@ void Root::Iteration()
 {
     unsigned long lastPrinted = -1; // Track the last printed value
     unsigned long c_iteration = line_ingress_clock.GetTickCount();
+    for(int i=0; i<RX_COMP_EQ_IN_PARALLELISM/2; i=i+1){
+        input_lp_signal_txi[i] = u_stim_hi.o_parallel_low[i].GetData();
+        input_lp_signal_txq[i] = u_stim_hq.o_parallel_low[i].GetData();
+        input_lp_signal_txi[i+(RX_COMP_EQ_IN_PARALLELISM/2-1)] = u_stim_hi.o_parallel_high[i].GetData();
+        input_lp_signal_txq[i+(RX_COMP_EQ_IN_PARALLELISM/2-1)] = u_stim_hq.o_parallel_high[i].GetData();
+
+    }
+
     if (!(c_iteration % 500) && enable_log && c_iteration != lastPrinted)
     {
         lastPrinted = c_iteration;
@@ -186,6 +197,7 @@ void Root::Iteration()
 
 bool Root::ContinueRunning()
 {
+
     return line_ingress_clock.GetTickCount() <= n_iterations;
 }
 
