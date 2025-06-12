@@ -82,18 +82,27 @@ test = Test (
 
 test.__memory_limit = 50e3
 
+N = 1
+RX_COMP_EQ_PAR_OUT = 384
+C_LEN = 162 # Minimum
+
+
+ 
+
 # Matrix generation
 mode                        = [1, 0, 2]
 #                               0,8,16        1,9,17      2,10,18   3,11,19  4,12,20  5,13,21 6,14,22  7,15,23
-testcase_name               = ["DSPInBypass","LpInBypass","Noise\t","Offset","Gain\t","Eq\t","All\t","All Noise"]
-rx_comp_eq_mu_lms           = [0            ,0           ,0        ,0       ,0       ,255   ,255    ,255        ]
-adc_offset_alpha            = [63           ,63          ,63       ,32      ,32      ,63    ,32     ,32         ]
-max_count_cal_gain_offset   = [20           ,20          ,20       ,17000   ,17000   ,20    ,17000  ,17000      ]
-data_input_dsp              = [1            ,0           ,1        ,0       ,0       ,0     ,0      ,1          ] # 0 send zero 1 dsp in
-data_input_lp_noise         = [0            ,1           ,2        ,1       ,1       ,1     ,1      ,2          ] # 0 send zero 1 tx out 2 send noise
-CORR_LEN                    = [324          ,324         ,324      ,324     ,324     ,2000  ,2000   ,2000       ] # 
-gain_sel                    = [1            ,1           ,1        ,1       ,0       ,1     ,0      ,0          ] # 
-offset_sel                  = [1            ,1           ,1        ,0       ,1       ,1     ,0      ,0          ] # 
+testcase_name               = ["DSPInBypass","LpInBypass","Noise\t","Offset","Gain\t","Eq\t","All\t","All Noise", "bkg_corr"]
+rx_comp_eq_mu_lms           = [0            ,0           ,0        ,0       ,0       ,255   ,255    ,255        , 255       ]
+adc_offset_alpha            = [63           ,63          ,63       ,32      ,32      ,63    ,32     ,32         , 32        ]
+max_count_cal_gain_offset   = [20           ,20          ,20       ,17000   ,17000   ,20    ,17000  ,17000      , 17000     ]
+data_input_dsp              = [1            ,0           ,1        ,0       ,0       ,0     ,0      ,1          , 1         ] # 0 send zero 1 dsp in
+data_input_lp_noise         = [0            ,1           ,2        ,1       ,1       ,1     ,1      ,2          , 0         ] # 0 send zero 1 tx out 2 send noise
+gain_sel                    = [1            ,1           ,1        ,1       ,0       ,1     ,0      ,0          , 0         ] # 
+offset_sel                  = [1            ,1           ,1        ,0       ,1       ,1     ,0      ,0          , 0         ] # 
+bypass_cor                  = [1            ,1           ,1        ,1       ,1       ,1     ,0      ,0          , 0         ] # 
+bkg_corr                    = [0            ,0           ,0        ,0       ,0       ,0     ,0      ,0          , 1         ] # 
+        
 caseMatrix = []
 
 for md in mode:
@@ -105,16 +114,16 @@ for md in mode:
              max_count_cal_gain_offset[i],  # 3                                       
              data_input_dsp[i],             # 4                               
              data_input_lp_noise[i],        # 5                               
-             CORR_LEN[i],                   # 6
-             gain_sel[i],                   # 7
-             offset_sel[i]                  # 8
+             gain_sel[i],                   # 6
+             offset_sel[i],                 # 7
+             bypass_cor[i]                  # 9
              ])
 
 print(f"\n-----------------------------------  CASE MATRIX  ----------------------------------")
-print(f"{'Case':<6} {'FullRate':<9} {'Mu':<5} {'Alpha':<7} {'Count_G_O':<10} {'DSP_in':<8} {'LP_in':<8} {'Corr_len':<9} {'Gain_sel':<8} {'offset_sel':<8}")
+print(f"{'Case':<6} {'FullRate':<9} {'Mu':<5} {'Alpha':<7} {'Count_G_O':<10} {'DSP_in':<8} {'LP_in':<8} {'Gain_sel':<8} {'offset_sel':<11} {'bypass_cor':<8}")
 
 for idx, row in enumerate(caseMatrix):
-    print(f"{idx:<6} {row[0]:<9} {row[1]:<5} {row[2]:<7} {row[3]:<10} {row[4]:<8} {row[5]:<8} {row[6]:<9} {row[7]:<8} {row[8]:<8}")
+    print(f"{idx:<6} {row[0]:<9} {row[1]:<5} {row[2]:<7} {row[3]:<10} {row[4]:<8} {row[5]:<8} {row[6]:<9} {row[7]:<8} {row[8]:<8} ")
 
 case_number = Parameter(
     name            = 'root.case_number',
@@ -124,7 +133,7 @@ case_number = Parameter(
 )
 
 for i,case_num in enumerate(case_number):
-    if i==5: # use this if to run a specific test  
+    if i==7: # use this if to run a specific test  
         
         print(f"\n# # # # # # Test Case Number ", i, " Name: ", end="  ")
         print(testcase_name[i%8], end="")
@@ -134,18 +143,46 @@ for i,case_num in enumerate(case_number):
         else:
             print("HALF RATE")
         print(f"\n-----------------------------------  CASE MATRIX  ----------------------------------")
-        print(f"{'Case':<6} {'FullRate':<9} {'Mu':<5} {'Alpha':<7} {'Count_G_O':<10} {'DSP_in':<8} {'LP_in':<8} {'Corr_len':<9} {'Gain_sel':<8} {'Offset_sel':<8}")
-        print(f"{i:<6} {caseMatrix[i][0]:<9} {caseMatrix[i][1]:<5} {caseMatrix[i][2]:<7} {caseMatrix[i][3]:<10} {caseMatrix[i][4]:<8} {caseMatrix[i][5]:<8} {caseMatrix[i][6]:<9} {caseMatrix[i][7]:<8} {caseMatrix[i][8]:<8}")
+        print(f"{'Case':<6} {'Mode':<9} {'Mu':<5} {'Alpha':<7} {'Count_G_O':<10} {'DSP_in':<8} {'LP_in':<8} {'Gain_sel':<8} {'Offset_sel':<8}  {'bypass_cor':<8}")
+        print(f"{i:<6} {caseMatrix[i][0]:<9} {caseMatrix[i][1]:<5} {caseMatrix[i][2]:<7} {caseMatrix[i][3]:<10} {caseMatrix[i][4]:<8} {caseMatrix[i][5]:<8} {caseMatrix[i][6]:<9} {caseMatrix[i][7]:<8} {caseMatrix[i][8]:<11}")
 
         # Create Case
         case = Case(simh,mode='E1',group='G0')
         # Add Parameters
         case.add(case_num   )
 
+        if caseMatrix[i][0] == 0: 
+            RX_COMP_EQ_PAR_OUT = 162
+
+        if caseMatrix[i][0] == 1: 
+            RX_COMP_EQ_PAR_OUT = 324
+
+        if caseMatrix[i][0] == 2: 
+            RX_COMP_EQ_PAR_OUT = 288
+
+        rm_correlation_length_effective = C_LEN
+
+        if (rm_correlation_length_effective % (RX_COMP_EQ_PAR_OUT+1)) + 1 == (RX_COMP_EQ_PAR_OUT+1):
+
+            print("Valid correlation length")
+
+        else:
+
+            # Adjust to the closest valid value
+
+            rm_correlation_length_effective = (C_LEN // (RX_COMP_EQ_PAR_OUT+1) + 1) * (RX_COMP_EQ_PAR_OUT+1) - 1
+
+            print("Adjusting correlation length to closest valid")
+
+            print("rm_correlation_length = " + str(rm_correlation_length_effective))
+
+
         # Simulation taps
         case.settings['root']['enable_log'             ] = 1
-        case.settings['root']['n_iterations'           ] = 1000 + caseMatrix[i][3] + caseMatrix[i][6] #20000
+        case.settings['root']['n_iterations'           ] = 1000 + caseMatrix[i][3] + n_iterations_effective #20000
         case.settings['root']['logger_buffer_size'     ] = 1000
+        
+        print(f"n_iterations = {1000 + caseMatrix[i][3] + n_iterations_effective}")
 
         # Configure DSP
         set_clocks_simplistic_case(case)
@@ -169,10 +206,20 @@ for i,case_num in enumerate(case_number):
         REGMAP["u_dsp_rx_h"]["u_rx_comp_eq_hq"]["RM_RX_COMP_EQ_HQ_MU_LMS"]                     = caseMatrix[i][1]
         REGMAP["u_dsp_rx_h"]["u_rx_adc_gain_offset_hi"]["RM_RX_ADC_OFFSET_ALPHA_HI"]           = caseMatrix[i][2]
         REGMAP["u_dsp_rx_h"]["u_rx_adc_gain_offset_hq"]["RM_RX_ADC_OFFSET_ALPHA_HQ"]           = caseMatrix[i][2]
-        REGMAP["u_dsp_rx_h"]["u_rx_adc_gain_offset_hi"]["RM_RX_ADC_AGC_GAIN_SEL_HI"]           = caseMatrix[i][7]
-        REGMAP["u_dsp_rx_h"]["u_rx_adc_gain_offset_hq"]["RM_RX_ADC_AGC_GAIN_SEL_HQ"]           = caseMatrix[i][7]
-        REGMAP["u_dsp_rx_h"]["u_rx_correlator_hi"]["RM_RX_CORR_HI_CORRELATION_LENGTH"]         = caseMatrix[i][6]
-        REGMAP["u_dsp_rx_h"]["u_rx_correlator_hq"]["RM_RX_CORR_HQ_CORRELATION_LENGTH"]         = caseMatrix[i][6]
+        REGMAP["u_dsp_rx_h"]["u_rx_adc_gain_offset_hi"]["RM_RX_ADC_AGC_GAIN_SEL_HI"]           = caseMatrix[i][6]
+        REGMAP["u_dsp_rx_h"]["u_rx_adc_gain_offset_hq"]["RM_RX_ADC_AGC_GAIN_SEL_HQ"]           = caseMatrix[i][6]
+        REGMAP["u_dsp_rx_h"]["u_rx_correlator_hi"]["RM_RX_CORR_HI_CORRELATION_LENGTH"]         = rm_correlation_length_effective
+        REGMAP["u_dsp_rx_h"]["u_rx_correlator_hq"]["RM_RX_CORR_HQ_CORRELATION_LENGTH"]         = rm_correlation_length_effective
+        
+        if caseMatrix[i][8]:
+            REGMAP["u_dsp_rx_h"]["u_rx_correlator_hi"]["RM_RX_CORR_HI_BYPASS_CORRELATOR"]          = 1
+            REGMAP["u_dsp_rx_h"]["u_rx_correlator_hq"]["RM_RX_CORR_HQ_BYPASS_CORRELATOR"]          = 1
+            n_iterations_effective = 10
+        else:
+            REGMAP["u_dsp_rx_h"]["u_rx_correlator_hi"]["RM_RX_CORR_HI_BYPASS_CORRELATOR"]          = 0
+            REGMAP["u_dsp_rx_h"]["u_rx_correlator_hq"]["RM_RX_CORR_HQ_BYPASS_CORRELATOR"]          = 0
+            n_iterations_effective = (rm_correlation_length_effective*(RX_COMP_EQ_PAR_OUT+16+30))
+
         REGMAP["u_dsp_rx_h"]["u_rx_scfsm"]["RM_STATIC_RX_SCFSM_MAX_CTER_CAL_GAIN_OFFSET_DONE"] = caseMatrix[i][3]
 
         # Loopback reset
@@ -224,18 +271,16 @@ for i,case_num in enumerate(case_number):
         case.set_value(0 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_rx_afifo_lp_hi_read_reset"   , "root.line_ingress_clock", "p", 10*384, 0)
 
         # if bypass
-        if caseMatrix[i][7]==1:
+        if caseMatrix[i][6]==1:
             case.set_value(1 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_rx_scfsm_sel_rx_gain_hi_enable"            , "root.line_ingress_clock", "p", 384*10, 0)
             case.set_value(1 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_rx_scfsm_sel_rx_gain_hq_enable"            , "root.line_ingress_clock", "p", 384*10, 0)
             case.set_value(0 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_rx_scfsm_ovr_rx_gain_hi_enable"            , "root.line_ingress_clock", "p", 384*10, 0)
             case.set_value(0 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_rx_scfsm_ovr_rx_gain_hq_enable"            , "root.line_ingress_clock", "p", 384*10, 0)
-        if caseMatrix[i][8]==1:
+        if caseMatrix[i][7]==1:
             case.set_value(1 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_rx_scfsm_sel_rx_offset_hi_enable"            , "root.line_ingress_clock", "p", 384*10, 0)
             case.set_value(1 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_rx_scfsm_sel_rx_offset_hq_enable"            , "root.line_ingress_clock", "p", 384*10, 0)
             case.set_value(0 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_rx_scfsm_ovr_rx_offset_hi_enable"            , "root.line_ingress_clock", "p", 384*10, 0)
             case.set_value(0 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_rx_scfsm_ovr_rx_offset_hq_enable"            , "root.line_ingress_clock", "p", 384*10, 0)
-
-
 
         # # Add logs
         log_rtl(case = case, STEP=1, hierarchy = 0, simh=simh)

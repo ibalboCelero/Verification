@@ -177,8 +177,8 @@ void Root::Iteration()
     for(int i=0; i<RX_COMP_EQ_IN_PARALLELISM/2; i=i+1){
         input_lp_signal_txi[i] = u_stim_hi.o_parallel_low[i].GetData();
         input_lp_signal_txq[i] = u_stim_hq.o_parallel_low[i].GetData();
-        input_lp_signal_txi[i+(RX_COMP_EQ_IN_PARALLELISM/2-1)] = u_stim_hi.o_parallel_high[i].GetData();
-        input_lp_signal_txq[i+(RX_COMP_EQ_IN_PARALLELISM/2-1)] = u_stim_hq.o_parallel_high[i].GetData();
+        input_lp_signal_txi[i+(RX_COMP_EQ_IN_PARALLELISM/2)] = u_stim_hi.o_parallel_high[i].GetData();
+        input_lp_signal_txq[i+(RX_COMP_EQ_IN_PARALLELISM/2)] = u_stim_hq.o_parallel_high[i].GetData();
 
     }
 

@@ -134,6 +134,47 @@ initial begin
 
 end
 
+localparam    [8                  : 0]    SKIPPED_POSITIONS  [59 : 0] = { 383 , 377 , 371 , 364 ,       //  Positions of the original DSP signal that are skipped in the equalizer
+                                                                          358 , 351 , 345 , 339 ,
+                                                                          332 , 326 , 319 , 313 ,
+                                                                          307 , 300 , 294 , 287 ,
+                                                                          281 , 275 , 268 , 262 ,
+                                                                          255 , 249 , 243 , 236 ,
+                                                                          230 , 223 , 217 , 211 ,
+                                                                          204 , 198 , 191 , 185 ,
+                                                                          179 , 172 , 166 , 159 ,
+                                                                          153 , 147 , 140 , 134 ,
+                                                                          127 , 121 , 115 , 108 ,
+                                                                          102 , 95  , 89  , 83  ,
+                                                                          76  , 70  , 63  , 57  ,
+                                                                          51  , 44  , 38  , 31  ,
+                                                                          25  , 19  , 12  , 6   }   ;
+
+integer                                   skip_index                                                ;   //  Indicates how many skipped bytes have been reinserted in the reconstructed signals
+logic         [3072               - 1 : 0]        reconstructed_dsp_rx_hi                           ;
+logic         [3072               - 1 : 0]        reconstructed_dsp_rx_hq                           ;
+
+//----> Reconstructs the original DSP signal by reinserting the skipped bytes at their correct positions and multiplying by -1 to recover polarity
+always @(o_dsp_rx_hi)
+begin
+    for (int j = 0 ; j < 3072/8 ; j = j + 1)
+    begin
+        if (j==SKIPPED_POSITIONS[skip_index])
+        begin
+            reconstructed_dsp_rx_hi [(j*8) +: 8]  = o_dsp_rx_hi [2592 + (skip_index*8) +: 8]        ;
+            reconstructed_dsp_rx_hq [(j*8) +: 8]  = o_dsp_rx_hq [2592 + (skip_index*8) +: 8]        ;
+            skip_index                            = skip_index + 1                                  ;
+        end
+        else
+        begin
+            reconstructed_dsp_rx_hi [(j*8) +: 8]  = o_dsp_rx_hi [(j - skip_index)*8 +: 8] * (-1)    ;
+            reconstructed_dsp_rx_hq [(j*8) +: 8]  = o_dsp_rx_hq [(j - skip_index)*8 +: 8] * (-1)    ;
+        end
+    end
+    skip_index  = 'd0                                                                               ;
+end
+
+
 clock
   u_clock_line_ingress
   (
