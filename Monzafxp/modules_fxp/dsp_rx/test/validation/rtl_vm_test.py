@@ -91,7 +91,7 @@ C_LEN = 162 # Minimum
 
 # Matrix generation
 mode                        = [1, 0, 2]
-#                               0,8,16        1,9,17      2,10,18   3,11,19  4,12,20  5,13,21 6,14,22  7,15,23
+#                               0,8,16        1,9,17      2,10,18   3,11,19  4,12,20  5,13,21 6,14,22  7,15,23    8, 16, 24
 testcase_name               = ["DSPInBypass","LpInBypass","Noise\t","Offset","Gain\t","Eq\t","All\t","All Noise", "bkg_corr"]
 rx_comp_eq_mu_lms           = [0            ,0           ,0        ,0       ,0       ,255   ,255    ,255        , 255       ]
 adc_offset_alpha            = [63           ,63          ,63       ,32      ,32      ,63    ,32     ,32         , 32        ]
@@ -100,7 +100,7 @@ data_input_dsp              = [1            ,0           ,1        ,0       ,0  
 data_input_lp_noise         = [0            ,1           ,2        ,1       ,1       ,1     ,1      ,2          , 0         ] # 0 send zero 1 tx out 2 send noise
 gain_sel                    = [1            ,1           ,1        ,1       ,0       ,1     ,0      ,0          , 0         ] # 
 offset_sel                  = [1            ,1           ,1        ,0       ,1       ,1     ,0      ,0          , 0         ] # 
-bypass_cor                  = [1            ,1           ,1        ,1       ,1       ,1     ,0      ,0          , 0         ] # 
+bypass_cor                  = [1            ,1           ,1        ,1       ,1       ,1     ,0      ,1          , 0         ] # 
 bkg_corr                    = [0            ,0           ,0        ,0       ,0       ,0     ,0      ,0          , 1         ] # 
         
 caseMatrix = []
@@ -176,14 +176,6 @@ for i,case_num in enumerate(case_number):
 
             print("rm_correlation_length = " + str(rm_correlation_length_effective))
 
-
-        # Simulation taps
-        case.settings['root']['enable_log'             ] = 1
-        case.settings['root']['n_iterations'           ] = 1000 + caseMatrix[i][3] + n_iterations_effective #20000
-        case.settings['root']['logger_buffer_size'     ] = 1000
-        
-        print(f"n_iterations = {1000 + caseMatrix[i][3] + n_iterations_effective}")
-
         # Configure DSP
         set_clocks_simplistic_case(case)
 
@@ -215,10 +207,17 @@ for i,case_num in enumerate(case_number):
             REGMAP["u_dsp_rx_h"]["u_rx_correlator_hi"]["RM_RX_CORR_HI_BYPASS_CORRELATOR"]          = 1
             REGMAP["u_dsp_rx_h"]["u_rx_correlator_hq"]["RM_RX_CORR_HQ_BYPASS_CORRELATOR"]          = 1
             n_iterations_effective = 10
-        else:
+        elif caseMatrix[i][8]==0: 
             REGMAP["u_dsp_rx_h"]["u_rx_correlator_hi"]["RM_RX_CORR_HI_BYPASS_CORRELATOR"]          = 0
             REGMAP["u_dsp_rx_h"]["u_rx_correlator_hq"]["RM_RX_CORR_HQ_BYPASS_CORRELATOR"]          = 0
             n_iterations_effective = (rm_correlation_length_effective*(RX_COMP_EQ_PAR_OUT+16+30))
+
+        # Simulation taps
+        case.settings['root']['enable_log'             ] = 1
+        case.settings['root']['n_iterations'           ] = 1000 + caseMatrix[i][3] + n_iterations_effective #20000
+        case.settings['root']['logger_buffer_size'     ] = 1000
+        
+        print(f"n_iterations = {1000 + caseMatrix[i][3] + n_iterations_effective}")
 
         REGMAP["u_dsp_rx_h"]["u_rx_scfsm"]["RM_STATIC_RX_SCFSM_MAX_CTER_CAL_GAIN_OFFSET_DONE"] = caseMatrix[i][3]
 
@@ -256,6 +255,7 @@ for i,case_num in enumerate(case_number):
         # Enable Regmap
         case.set_value(1 , "root.dsp_rx_regmap_enable", "root.line_ingress_clock", "p", 100, 0)
 
+        cte_clk_cmd = 1152
         # Release Reset
         case.set_value(1 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_rx_scfsm_rst_n"  , "root.line_ingress_clock", "p", 200, 0)
         case.set_value(1 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_rx_scfsm_enable" , "root.line_ingress_clock", "p", 200, 0)
@@ -269,6 +269,11 @@ for i,case_num in enumerate(case_number):
         case.set_value(0 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_rx_afifo_lp_hq_read_reset"   , "root.line_ingress_clock", "p", 10*384, 0)
         case.set_value(0 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_rx_afifo_lp_hi_write_reset"  , "root.line_ingress_clock", "p", 10*384, 0)
         case.set_value(0 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_rx_afifo_lp_hi_read_reset"   , "root.line_ingress_clock", "p", 10*384, 0)
+
+        if caseMatrix[i][9]: 
+            case.set_value(1 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_static_rx_corr_hi_bypass_correlator"  , "root.clk_cmd_handler", "p", cte_clk_cmd*18000//3, 0)
+            case.set_value(1 , "root.u_dsp_rx_h.u_dsp_rx_regmap.rm_static_rx_corr_hi_bypass_correlator"  , "root.clk_cmd_handler", "p", cte_clk_cmd*18000//3, 0)
+
 
         # if bypass
         if caseMatrix[i][6]==1:
